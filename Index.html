@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Masjid-e-Quba</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Work+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ================= CONFIG =================
+     Swap the mosque name, address, colors, and copy for your own.
+     Every editable spot is marked CONFIG.
+  ============================================= */
+  :root{
+    --deep:      #0E3B35;
+    --deep-2:    #123F39;
+    --deep-3:    #0A2E29;
+    --gold:      #C9A227;
+    --gold-light:#E9CB70;
+    --parchment: #F7F3EA;
+    --parchment-2:#EFE8D8;
+    --ink:       #17211D;
+    --muted:     #55645C;
+    --line:      rgba(201,162,39,0.35);
+    --radius:    2px;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; }
+  }
+  body{ margin:0; background:var(--parchment); color:var(--ink); font-family:'Work Sans', sans-serif; line-height:1.6; }
+  h1,h2,h3,.display{ font-family:'Amiri', serif; font-weight:700; margin:0; }
+  a{ color:inherit; }
+  img{ max-width:100%; display:block; }
+  button{ font-family:inherit; cursor:pointer; }
+  .eyebrow{ font-family:'IBM Plex Mono', monospace; font-size:0.72rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--gold); }
+  .wrap{ max-width:1160px; margin:0 auto; padding:0 28px; }
+  .star-tile{ position:absolute; inset:0; opacity:0.10; pointer-events:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='84' height='84' viewBox='0 0 84 84'%3E%3Cg fill='none' stroke='%23E9CB70' stroke-width='0.7'%3E%3Cpath d='M42 4 L54 26 L78 26 L60 42 L68 66 L42 52 L16 66 L24 42 L6 26 L30 26 Z'/%3E%3C/g%3E%3C/svg%3E");
+    background-size:84px 84px; }
+
+  /* ---- nav ---- */
+  header.site{ position:sticky; top:0; z-index:50; background:var(--deep); border-bottom:1px solid var(--line); }
+  .nav{ display:flex; align-items:center; justify-content:space-between; height:72px; }
+  .brand{ display:flex; align-items:center; gap:12px; color:var(--parchment); text-decoration:none; }
+  .brand-mark{ width:32px; height:32px; flex:0 0 auto; }
+  .brand-name{ font-family:'Amiri', serif; font-size:1.25rem; font-weight:700; }
+  nav.links{ display:flex; gap:30px; }
+  nav.links a{ color:var(--parchment); text-decoration:none; font-size:0.9rem; padding-bottom:4px; border-bottom:1px solid transparent; transition:border-color .2s,color .2s; }
+  nav.links a:hover{ border-color:var(--gold); color:var(--gold-light); }
+  .nav-cta{ background:var(--gold); color:var(--deep-3); font-weight:600; font-size:0.86rem; padding:10px 20px; border:none; border-radius:var(--radius); text-decoration:none; transition:background .2s, transform .15s; }
+  .nav-cta:hover{ background:var(--gold-light); transform:translateY(-1px); }
+  .menu-btn{ display:none; background:none; border:1px solid var(--line); color:var(--parchment); padding:8px 10px; border-radius:var(--radius); }
+  @media (max-width:860px){
+    nav.links{ display:none; }
+    .menu-btn{ display:block; }
+    nav.links.open{ display:flex; flex-direction:column; position:absolute; top:72px; left:0; right:0; background:var(--deep); padding:8px 28px 20px; border-bottom:1px solid var(--line); }
+    nav.links.open a{ padding:12px 0; border-bottom:1px solid rgba(233,203,112,0.12); }
+  }
+
+  /* ---- hero ---- */
+  .hero{ position:relative; background:linear-gradient(180deg, var(--deep) 0%, var(--deep-2) 100%); color:var(--parchment); overflow:hidden; padding:96px 0 72px; text-align:center; }
+  .hero .wrap{ position:relative; z-index:2; }
+  .hijri-date{ font-family:'IBM Plex Mono', monospace; font-size:0.8rem; color:var(--gold-light); opacity:0.9; margin-bottom:16px; }
+  .hero h1{ font-size:clamp(2.2rem,4.6vw,3.4rem); line-height:1.12; margin:0 auto 18px; max-width:16ch; }
+  .hero h1 em{ font-style:italic; color:var(--gold-light); }
+  .hero p.lede{ font-size:1.05rem; color:rgba(247,243,234,0.82); max-width:52ch; margin:0 auto 30px; }
+  .btn-primary{ background:var(--gold); color:var(--deep-3); font-weight:600; padding:14px 30px; border-radius:var(--radius); text-decoration:none; display:inline-block; transition:background .2s, transform .15s; }
+  .btn-primary:hover{ background:var(--gold-light); transform:translateY(-1px); }
+
+  /* ---- prayer strip ---- */
+  .prayer-strip{ background:var(--deep-3); position:relative; }
+  .prayer-strip .wrap{ position:relative; z-index:2; }
+  .prayer-cols{ display:grid; grid-template-columns:repeat(5,1fr); }
+  .prayer-col{ padding:34px 18px; text-align:center; border-right:1px solid var(--line); }
+  .prayer-col:last-child{ border-right:none; }
+  .prayer-col .p-icon{ width:30px; height:30px; margin:0 auto 14px; color:var(--gold); }
+  .prayer-col .p-name{ font-family:'IBM Plex Mono',monospace; font-size:0.72rem; letter-spacing:0.16em; text-transform:uppercase; color:rgba(247,243,234,0.6); margin-bottom:10px; }
+  .prayer-col .p-time{ font-family:'Amiri',serif; font-size:1.7rem; color:var(--gold-light); }
+  .prayer-col.active{ background:rgba(233,203,112,0.08); }
+  .next-line{ text-align:center; padding:14px 0; font-size:0.82rem; color:rgba(247,243,234,0.65); border-top:1px solid var(--line); }
+  .next-line strong{ color:var(--gold-light); }
+  @media (max-width:760px){
+    .prayer-cols{ grid-template-columns:repeat(3,1fr); }
+    .prayer-col:nth-child(3){ border-right:none; }
+  }
+  @media (max-width:480px){ .prayer-cols{ grid-template-columns:repeat(2,1fr); } .prayer-col:nth-child(even){ border-right:none; } }
+
+  /* ---- jummah ---- */
+  .jummah{ background:var(--parchment); padding:88px 0; }
+  .section-head{ max-width:640px; margin:0 auto 48px; text-align:center; }
+  .section-head h2{ font-size:clamp(1.8rem,3vw,2.3rem); margin-top:10px; }
+  .section-head p{ color:var(--muted); margin-top:12px; }
+  .salat-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line); }
+  .salat-card{ background:var(--parchment-2); padding:34px 28px; text-align:center; }
+  .salat-card .eyebrow{ color:var(--deep); }
+  .salat-card h3{ font-size:1.2rem; margin:10px 0 20px; }
+  .salat-card .row{ display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px solid var(--line); font-size:0.9rem; }
+  .salat-card .row:last-child{ border-bottom:none; }
+  .salat-card .row span:last-child{ font-family:'IBM Plex Mono',monospace; color:var(--deep); }
+  @media (max-width:760px){ .salat-grid{ grid-template-columns:1fr; } }
+
+  /* ---- about ---- */
+  .about{ background:var(--parchment-2); padding:96px 0; }
+  .about-grid{ display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; }
+  .about-copy p{ color:#3A453F; margin-bottom:16px; }
+  .stat-row{ display:flex; gap:40px; margin-top:28px; }
+  .stat b{ display:block; font-family:'Amiri',serif; font-size:1.8rem; color:var(--deep); }
+  .stat span{ font-size:0.8rem; color:var(--muted); }
+  .about-panel{ background:var(--deep); border-radius:var(--radius); padding:40px; color:var(--parchment); position:relative; overflow:hidden; }
+  .about-panel h3{ font-size:1.25rem; color:var(--gold-light); margin-bottom:12px; }
+  .about-panel p{ color:rgba(247,243,234,0.82); font-size:0.95rem; }
+
+  /* ---- services ---- */
+  .services{ background:var(--parchment); padding:96px 0; }
+  .service-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line); }
+  .service-card{ background:var(--parchment); padding:36px 30px; min-height:220px; display:flex; flex-direction:column; gap:14px; }
+  .service-card .icon{ width:30px; height:30px; color:var(--deep); }
+  .service-card h3{ font-size:1.12rem; }
+  .service-card p{ font-size:0.9rem; color:var(--muted); }
+  .service-card a.more{ margin-top:auto; font-size:0.82rem; color:var(--gold); text-decoration:none; border-bottom:1px solid var(--gold); align-self:flex-start; }
+  @media (max-width:860px){ .service-grid{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:560px){ .service-grid{ grid-template-columns:1fr; } }
+
+  /* ---- gallery ---- */
+  .gallery{ background:var(--parchment-2); padding:96px 0; }
+  .gallery-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+  .gallery-tile{ aspect-ratio:4/3; border-radius:var(--radius); position:relative; overflow:hidden; background:linear-gradient(135deg,var(--deep),var(--deep-2)); display:flex; align-items:center; justify-content:center; }
+  .gallery-tile span{ font-family:'IBM Plex Mono',monospace; font-size:0.7rem; color:rgba(233,203,112,0.55); letter-spacing:0.1em; text-transform:uppercase; }
+  @media (max-width:760px){ .gallery-grid{ grid-template-columns:repeat(2,1fr); } }
+
+  /* ---- donate cta band ---- */
+  .donate{ background:var(--deep); color:var(--parchment); position:relative; overflow:hidden; padding:80px 0; text-align:center; }
+  .donate .wrap{ position:relative; z-index:2; max-width:640px; }
+  .donate h2{ color:var(--parchment); font-size:clamp(1.7rem,3vw,2.2rem); }
+  .donate p{ color:rgba(247,243,234,0.8); margin:14px 0 26px; }
+
+  /* ---- contact ---- */
+  .contact{ background:var(--parchment); padding:96px 0; }
+  .contact-grid{ display:grid; grid-template-columns:0.9fr 1.1fr; gap:64px; }
+  .contact-info h4{ font-family:'Amiri',serif; font-size:1.1rem; color:var(--deep); margin-bottom:8px; }
+  .contact-block{ margin-bottom:28px; }
+  .contact-block p{ color:var(--muted); font-size:0.95rem; }
+  .socials{ display:flex; gap:12px; margin-top:8px; }
+  .socials a{ width:36px; height:36px; border-radius:50%; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; color:var(--deep); text-decoration:none; font-size:0.8rem; }
+  form.contact-form{ display:grid; gap:16px; }
+  .contact-form input, .contact-form textarea{
+    width:100%; padding:14px 16px; border:1px solid var(--line); background:var(--parchment-2);
+    font-family:'Work Sans',sans-serif; font-size:0.95rem; border-radius:var(--radius); color:var(--ink);
+  }
+  .contact-form textarea{ min-height:120px; resize:vertical; }
+  .contact-form button{ justify-self:start; background:var(--deep); color:var(--parchment); border:none; padding:14px 30px; border-radius:var(--radius); font-weight:600; transition:background .2s; }
+  .contact-form button:hover{ background:var(--deep-2); }
+  @media (max-width:860px){ .contact-grid{ grid-template-columns:1fr; } }
+
+  /* ---- footer ---- */
+  footer{ background:var(--deep-3); color:rgba(247,243,234,0.6); padding:32px 0; text-align:center; font-size:0.8rem; }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap nav">
+    <a href="#" class="brand">
+      <svg class="brand-mark" viewBox="0 0 40 40" fill="none">
+        <path d="M20 3 L20 12 M14 8 L26 8" stroke="#C9A227" stroke-width="1.6"/>
+        <path d="M8 34 V22 C8 13 14 8 20 8 C26 8 32 13 32 22 V34 Z" stroke="#E9CB70" stroke-width="1.6" fill="none"/>
+        <circle cx="20" cy="4" r="1.6" fill="#E9CB70"/>
+      </svg>
+      <span class="brand-name">Masjid-e-Quba</span>
+    </a>
+    <nav class="links" id="navLinks">
+      <a href="#prayer">Prayer Times</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a href="#donate" class="nav-cta">Donate</a>
+    <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">☰</button>
+  </div>
+</header>
+
+<section class="hero" id="prayer">
+  <div class="star-tile"></div>
+  <div class="wrap">
+    <div class="hijri-date" id="hijriDate">Loading Hijri date…</div>
+    <!-- CONFIG: tagline -->
+    <h1>Masjid-e-<em>Quba</em></h1>
+    <p class="lede">The Islamic Centre serving our community — open to worshippers and visitors throughout the year.</p>
+    <a href="#donate" class="btn-primary">Donate</a>
+  </div>
+</section>
+
+<section class="prayer-strip">
+  <div class="wrap">
+    <div class="prayer-cols" id="prayerCols">
+      <!-- filled by JS; static fallback below if fetch fails -->
+      <div class="prayer-col"><svg class="p-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M12 2v6M5 12H2m4.3-5.7L4.9 4.9M20 12h-3m1.4-7.1l-1.4 1.4M6 20a6 6 0 0112 0"/></svg><div class="p-name">Fajr</div><div class="p-time">5:12 AM</div></div>
+      <div class="prayer-col"><svg class="p-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><div class="p-name">Dhuhr</div><div class="p-time">1:24 PM</div></div>
+      <div class="prayer-col"><svg class="p-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4 18h16M6 18a6 6 0 0112 0M12 4v6m0 0l3-3m-3 3l-3-3"/></svg><div class="p-name">Asr</div><div class="p-time">5:38 PM</div></div>
+      <div class="prayer-col"><svg class="p-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4 18h16M6 18a6 6 0 0112 0"/><path d="M12 3v9"/></svg><div class="p-name">Maghrib</div><div class="p-time">8:32 PM</div></div>
+      <div class="prayer-col"><svg class="p-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M20 14.5A8 8 0 1110.2 4a6.3 6.3 0 009.8 10.5z"/></svg><div class="p-name">Isha</div><div class="p-time">10:01 PM</div></div>
+    </div>
+    <div class="next-line" id="nextUp">Fetching live timings…</div>
+  </div>
+</section>
+
+<section class="jummah">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Every Friday</div>
+      <h2>Jumu'ah Salah</h2>
+      <p><!-- CONFIG: intro line -->Three consecutive khutbahs so everyone in the community can attend, however busy the day.</p>
+    </div>
+    <div class="salat-grid">
+      <!-- CONFIG: edit each salat's talk / athaan / khutbah times -->
+      <div class="salat-card">
+        <div class="eyebrow">1st Salat</div>
+        <h3>Early Jamaah</h3>
+        <div class="row"><span>English talk</span><span>1:15 PM</span></div>
+        <div class="row"><span>1st Athaan</span><span>1:30 PM</span></div>
+        <div class="row"><span>Khutbah & Salat</span><span>1:45 PM</span></div>
+      </div>
+      <div class="salat-card">
+        <div class="eyebrow">2nd Salat</div>
+        <h3>Main Jamaah</h3>
+        <div class="row"><span>English talk</span><span>2:30 PM</span></div>
+        <div class="row"><span>Khutbah & Salat</span><span>2:45 PM</span></div>
+      </div>
+      <div class="salat-card">
+        <div class="eyebrow">3rd Salat</div>
+        <h3>Overflow Jamaah</h3>
+        <div class="row"><span>Khutbah & Salat</span><span>4:30 PM</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="wrap about-grid">
+    <div>
+      <div class="section-head" style="text-align:left; margin:0;">
+        <div class="eyebrow">About the masjid</div>
+        <h2>A place to pray, learn,<br>and belong.</h2>
+      </div>
+      <div class="about-copy" style="margin-top:24px;">
+        <!-- CONFIG: replace with your mosque's real history and mission -->
+        <p>Founded by families in the neighbourhood who wanted a nearby place to pray together, our masjid has grown into a full community centre — open for all five daily prayers, Jumu'ah, and the events that keep us connected between them.</p>
+        <p>We're run entirely by volunteers and supported by the community we serve. Whether you're here for salah, a class, or just somewhere quiet to sit, you're welcome.</p>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><b>5x</b><span>Daily congregational prayers</span></div>
+        <div class="stat"><b>200+</b><span>Families in our community</span></div>
+        <div class="stat"><b>15</b><span>Years serving the area</span></div>
+      </div>
+    </div>
+    <div class="about-panel">
+      <div class="star-tile" style="opacity:0.08;"></div>
+      <h3>Visiting for the first time?</h3>
+      <p><!-- CONFIG: practical info for newcomers -->Wudu facilities and shoe racks are at the main entrance. A separate, fully enclosed prayer space is available for sisters. Schools and community groups are welcome to arrange a tour.</p>
+      <div style="height:1px;background:rgba(233,203,112,0.2);margin:22px 0;"></div>
+      <h3>Ramadan at the masjid</h3>
+      <p><!-- CONFIG: Ramadan info -->Nightly iftar and taraweeh throughout the month — overflow rooms open once the main hall fills.</p>
+    </div>
+  </div>
+</section>
+
+<section class="services" id="services">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">What we offer</div>
+      <h2>Our services</h2>
+    </div>
+  </div>
+  <div class="wrap" style="padding:0;">
+    <div class="service-grid">
+      <!-- CONFIG: edit/add/remove service cards freely -->
+      <div class="service-card">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0112 5a5.5 5.5 0 019.5 7c-2.5 4.5-9.5 9-9.5 9z"/></svg>
+        <h3>Nikah Services</h3>
+        <p>Officiants and hall booking for marriage ceremonies, with guidance through each step of the process.</p>
+        <a class="more" href="#">Learn more →</a>
+      </div>
+      <div class="service-card">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="8" r="3"/><path d="M5 21c0-4 3-6 7-6s7 2 7 6"/></svg>
+        <h3>Family Counselling</h3>
+        <p>Confidential guidance for those experiencing family difficulties or seeking marriage advice, by appointment.</p>
+        <a class="more" href="#">Learn more →</a>
+      </div>
+      <div class="service-card">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+        <h3>Visits & Tours</h3>
+        <p>We welcome schools, colleges, and community groups year-round to learn about the masjid and Islam.</p>
+        <a class="more" href="#">Learn more →</a>
+      </div>
+      <div class="service-card">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 12h20M12 2v20M4 4l16 16M20 4L4 20"/></svg>
+        <h3>Qur'an & Islamic Studies</h3>
+        <p>Weeknight classes for children and adults covering tajweed, memorization, and core Islamic studies.</p>
+        <a class="more" href="#">Learn more →</a>
+      </div>
+      <div class="service-card">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
+        <h3>Janazah & Funeral Support</h3>
+        <p>Ghusl, funeral prayer, and burial coordination, with a volunteer team on call for families in need.</p>
+        <a class="more" href="#">Learn more →</a>
+      </div>
+      <div class="service-card">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        <h3>Community Iftar & Events</h3>
+        <p>Nightly iftar throughout Ramadan and community dinners year-round — everyone is welcome at the table.</p>
+        <a class="more" href="#">Learn more →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="gallery" id="gallery">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Our gallery</div>
+      <h2>Around the masjid</h2>
+      <p><!-- CONFIG: swap these placeholder tiles for real photos of your masjid --> Placeholder tiles — replace with photos of your prayer hall, events, and building.</p>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-tile"><span>Photo 01</span></div>
+      <div class="gallery-tile"><span>Photo 02</span></div>
+      <div class="gallery-tile"><span>Photo 03</span></div>
+      <div class="gallery-tile"><span>Photo 04</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="donate" id="donate">
+  <div class="star-tile" style="opacity:0.06;"></div>
+  <div class="wrap">
+    <div class="eyebrow">Support the masjid</div>
+    <h2>Every rakah here is made possible by you.</h2>
+    <p><!-- CONFIG: donation message -->We rely entirely on community donations to keep the lights on, pay staff, and run our programs. No gift is too small.</p>
+    <!-- CONFIG: replace # with your real donation processor link (LaunchGood, PayPal, Zeffy, etc.) -->
+    <a href="#" class="btn-primary">Donate now</a>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap contact-grid">
+    <div class="contact-info">
+      <div class="section-head" style="text-align:left; margin-bottom:32px;">
+        <div class="eyebrow">Get in touch</div>
+        <h2>Contact us</h2>
+      </div>
+      <div class="contact-block">
+        <h4>Our location</h4>
+        <p>5-316, S. R. Naik Nagar<br>Ida Jeedimetla, Medchal Dist.<br>Telangana 500055</p>
+      </div>
+      <div class="contact-block">
+        <h4>Phone & email</h4>
+        <!-- CONFIG: add your real phone number and email -->
+        <p><a href="tel:+910000000000">Add phone number</a><br><a href="mailto:info@masjidequba.org">info@masjidequba.org</a></p>
+      </div>
+      <div class="contact-block">
+        <h4>Join us</h4>
+        <div class="socials">
+          <a href="#" aria-label="Facebook">f</a>
+          <a href="#" aria-label="Twitter">x</a>
+          <a href="#" aria-label="YouTube">▶</a>
+        </div>
+      </div>
+    </div>
+    <form class="contact-form" onsubmit="event.preventDefault(); alert('This is a design preview — connect this form to your email or a form service to make it live.');">
+      <input type="text" placeholder="Name" required>
+      <input type="email" placeholder="Email address" required>
+      <textarea placeholder="Message" required></textarea>
+      <button type="submit">Send message</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  © <span id="year"></span> Masjid-e-Quba. Built for the community.
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  document.getElementById('menuBtn').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+
+  /* ================= CONFIG: prayer time source =================
+     City/country used for the Aladhan API lookup. Change to your
+     masjid's actual city, or replace this block with a fixed
+     schedule if your masjid publishes its own times.
+  ================================================================= */
+  const CITY = "Hyderabad";
+  const COUNTRY = "India";
+  const METHOD = 1; // University of Islamic Sciences, Karachi — common across South Asia
+
+  const ICONS = {
+    Fajr:    '<path d="M12 2v6M5 12H2m4.3-5.7L4.9 4.9M20 12h-3m1.4-7.1l-1.4 1.4M6 20a6 6 0 0112 0"/>',
+    Dhuhr:   '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+    Asr:     '<path d="M4 18h16M6 18a6 6 0 0112 0M12 4v6m0 0l3-3m-3 3l-3-3"/>',
+    Maghrib: '<path d="M4 18h16M6 18a6 6 0 0112 0"/><path d="M12 3v9"/>',
+    Isha:    '<path d="M20 14.5A8 8 0 1110.2 4a6.3 6.3 0 009.8 10.5z"/>'
+  };
+  const PRAYER_ORDER = ["Fajr","Dhuhr","Asr","Maghrib","Isha"];
+
+  function to12h(t){
+    const [h, m] = t.split(":").map(Number);
+    const period = h >= 12 ? "PM" : "AM";
+    const hour12 = ((h % 12) || 12);
+    return `${hour12}:${String(m).padStart(2,'0')} ${period}`;
+  }
+  function minutesFromNow(t){
+    const [h, m] = t.split(":").map(Number);
+    const now = new Date();
+    const target = new Date();
+    target.setHours(h, m, 0, 0);
+    return (target - now) / 60000;
+  }
+
+  async function loadPrayerTimes(){
+    try{
+      const res = await fetch(`https://api.aladhan.com/v1/timingsByCity?city=${encodeURIComponent(CITY)}&country=${encodeURIComponent(COUNTRY)}&method=${METHOD}`);
+      const data = await res.json();
+      const timings = data.data.timings;
+      const hijri = data.data.date.hijri;
+      document.getElementById('hijriDate').textContent =
+        `${hijri.weekday.en}, ${hijri.day} ${hijri.month.en} ${hijri.year} AH`;
+
+      const cols = document.getElementById('prayerCols');
+      cols.innerHTML = "";
+      let nextName = null, nextDiff = Infinity;
+
+      PRAYER_ORDER.forEach(name => {
+        const raw = timings[name];
+        const diff = minutesFromNow(raw);
+        if (diff > 0 && diff < nextDiff){ nextDiff = diff; nextName = name; }
+        const col = document.createElement('div');
+        col.className = 'prayer-col';
+        col.innerHTML = `
+          <svg class="p-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3">${ICONS[name]}</svg>
+          <div class="p-name">${name}</div>
+          <div class="p-time">${to12h(raw)}</div>
+        `;
+        cols.appendChild(col);
+      });
+
+      const nextUp = document.getElementById('nextUp');
+      if (nextName){
+        const idx = PRAYER_ORDER.indexOf(nextName);
+        cols.children[idx].classList.add('active');
+        const hrs = Math.floor(nextDiff / 60);
+        const mins = Math.round(nextDiff % 60);
+        nextUp.innerHTML = `Next: <strong>${nextName}</strong> in ${hrs > 0 ? hrs + 'h ' : ''}${mins}m`;
+      } else {
+        nextUp.innerHTML = `Next: <strong>Fajr</strong> tomorrow`;
+      }
+    } catch (err){
+      document.getElementById('nextUp').textContent = 'Live timings unavailable — showing sample times.';
+      document.getElementById('hijriDate').textContent = '';
+    }
+  }
+  loadPrayerTimes();
+</script>
+
+</body>
+</html>
